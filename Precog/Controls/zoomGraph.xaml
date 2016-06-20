@@ -1,0 +1,127 @@
+﻿<UserControl x:Class="Precog.Controls.zoomGraph"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vis="clr-namespace:Visiblox.Charts;assembly=Visiblox.Charts"
+             xmlns:CustCommands="clr-namespace:Precog.Commands"
+             xmlns:prims="clr-namespace:Visiblox.Charts.Primitives;assembly=Visiblox.Charts" xmlns:my="clr-namespace:Precog.Controls">
+
+    
+    <UserControl.Resources>
+        <Style x:Key="NoBorder" TargetType="Border">
+            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="BorderBrush" Value="Black" />
+        </Style>
+
+        <Style x:Key="AxixLabelsStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12"></Setter>
+        </Style>
+        <ContextMenu x:Key="graphContextMenu" Name="cntxMnuCopy" StaysOpen="True" Background="WhiteSmoke">
+            <MenuItem Name="CopyImage" Header="Copy Image" Command="CustCommands:CopyCommands.CopyGraph" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}" >
+                <MenuItem.Icon>
+                    <Image Source="/Precog;component/Images/GraphHH.png" Width="16" Height="16" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Name="CopyData" Header="Copy Data" Command="CustCommands:CopyCommands.CopyData" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}">
+                <MenuItem.Icon>
+                    <Image Source="/Precog;component/Images/CopyHS.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+            </MenuItem>
+        </ContextMenu>
+    </UserControl.Resources>
+        
+    <UserControl.CommandBindings>
+        <CommandBinding Command="CustCommands:CopyCommands.CopyData" Executed="Copy_Executed" />
+        <CommandBinding Command="CustCommands:CopyCommands.CopyGraph" Executed="CopyGraph_Executed" />
+    </UserControl.CommandBindings>
+
+    <Grid x:Name="LayoutRoot" Background="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Label Name="lbTitle" Grid.Row="0" Grid.Column="1" Content="Titel" FontSize="16" HorizontalAlignment="Center"  />
+        <StackPanel Name="NavPanel" Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
+            <Button Name="Prev" Click="Prev_Click">
+                <Image Source="/Precog;component/Images/LeftArrowShort_Blue.ico" />
+            </Button>
+            <Button Name="Next" Click="Next_Click">
+                <Image Source="/Precog;component/Images/RightArrowShort_Blue.ico"  />
+            </Button>
+        </StackPanel>
+        
+        <Expander Grid.Row="1" Grid.Column="0" Header="Details" IsExpanded="False" >
+            <ScrollViewer>
+                <StackPanel DockPanel.Dock="Bottom" Name="SeriesDetails"  />
+            </ScrollViewer>
+        </Expander>
+        
+        <vis:Chart Name="chart" Grid.Row="1" Grid.Column="1" ContextMenu="{StaticResource graphContextMenu}" VerticalAlignment="Center" HorizontalAlignment="Center" Background="Transparent" Margin="3" PlotAreaBorderStyle="{StaticResource NoBorder}" LegendVisibility="Visible" DisableContextMenu="True" >
+            <!-- Add zooming and a trackball -->
+            <vis:Chart.Behaviour>
+                <vis:BehaviourManager x:Name="behaviourManager" AllowMultipleEnabled="True">
+                    <vis:TrackballBehaviour x:Name="BehaviourTrack" IsEnabled="False" />
+                    <vis:ZoomBehaviour x:Name="BehabiourZooming" IsEnabled="True"  />
+                    <vis:PanBehaviour x:Name="BehaviourPanning" IsEnabled="False"/>
+                </vis:BehaviourManager>
+            </vis:Chart.Behaviour>
+            <!-- Define x and y axes. -->
+            <vis:Chart.XAxis>
+                <vis:LinearAxis ShowMinorTicks="True" ShowMajorTicks="True" ShowGridlines="True" TitleStyle="{StaticResource AxixLabelsStyle}" Title="Time [h]"/>
+            </vis:Chart.XAxis>
+            <vis:Chart.YAxis>
+                <vis:LinearAxis ShowMinorTicks="True" ShowMajorTicks="True" ShowGridlines="True" Title="Biomass/OD" TitleStyle="{StaticResource AxixLabelsStyle}" />
+            </vis:Chart.YAxis>
+            <vis:Chart.SecondaryYAxis>
+                <vis:LinearAxis ShowMinorTicks="True" ShowMajorTicks="True" ShowGridlines="False" Title="First Derivative [dlog2OD/dt]" TitleStyle="{StaticResource AxixLabelsStyle}"></vis:LinearAxis>
+            </vis:Chart.SecondaryYAxis>
+        </vis:Chart>
+        
+        <StackPanel Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Label Content="Lag: "/>
+                <TextBox Name="Lag" Text="0.00" Margin="0,0,5,0" IsEnabled="False"/>
+                <Label Content="Rate: "/>
+                <TextBox Name="Rate" Text="0.00" Margin="0,0,5,0" IsEnabled="False"/>
+                <Label Content="Efficiency: "/>
+                <TextBox Name="Yield" Text="0.00" IsEnabled="False"/>
+            </StackPanel>
+        </StackPanel>
+
+
+        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+            <GroupBox Name="FitGroup" Visibility="Collapsed">
+                <StackPanel Orientation="Vertical" >
+                    <Border Name="FitInfoBorder" BorderThickness="1" BorderBrush="Black" CornerRadius="7" Visibility="Collapsed" Margin="8" >
+                        <Label Name="lbInfo" Content="bla blabla bla" />
+                    </Border>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Name="btnFitReplace" Content="Use" IsEnabled="False" Width="70" Margin="5" Click="btnFitReplace_Click" />
+                        <Button Name="btnFitClear" Content="Clear" Width="70" Margin="5" Click="btnFitClear_Click" />
+                    </StackPanel>   
+                </StackPanel>
+            </GroupBox>
+            <StackPanel Name="RootStack" >
+                <!--<CheckBox Content="Display Raw" x:Name="ckDisplayRaw" Click="ckDisplayRaw_Click" />-->
+                
+                <!--<CheckBox Content="Lag" IsChecked="False" x:Name="ckDisplayMetaDataLag" Click="ckDisplayMetaDataLag_Click" />
+                <CheckBox Content="GT" IsChecked="False" x:Name="ckDisplayMetaDataRate" Click="ckDisplayMetaDataRate_Click" />
+                <CheckBox Content="Yield" IsChecked="False" x:Name="ckDisplayMetaDataYield" Click="ckDisplayMetaDataYield_Click" />
+                <StackPanel Margin="5" Orientation="Horizontal" VerticalAlignment="Bottom">
+                    <RadioButton Content="Zoom" IsChecked="True" x:Name="rbZoom" HorizontalAlignment="Left" Margin="5" Click="rbZoom_Checked" />
+                    <RadioButton Content="Move" x:Name="rbPan" HorizontalAlignment="Left" Margin="5" Click="rbPan_Checked" />
+                </StackPanel>
+                <Button Name="btnFitData" Click="Fit_Click" Content="Fit" />-->
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+    
+</UserControl>

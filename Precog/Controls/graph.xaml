@@ -1,0 +1,26 @@
+﻿<UserControl x:Class="Precog.Controls.graph"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vis="clr-namespace:Visiblox.Charts;assembly=Visiblox.Charts">
+    <UserControl >
+        <UserControl.Resources>
+            <Style x:Key="ChartStyle" TargetType="vis:Chart">
+                <Setter Property="LegendVisibility" Value="Collapsed" />
+            </Style>
+        </UserControl.Resources>
+        
+        <vis:Chart x:Name="Chart" Style="{StaticResource ChartStyle}" DisableContextMenu="True">
+            <vis:Chart.XAxis>
+                <vis:LinearAxis ShowAxis="False" ShowGridlines="False" Range="{Binding XRange}"/>
+            </vis:Chart.XAxis>
+            <vis:Chart.YAxis>
+                <vis:LinearAxis ShowAxis="False" ShowGridlines="False" Range="{Binding YRange}"/>
+            </vis:Chart.YAxis>
+            
+        </vis:Chart>
+      
+       
+    </UserControl>
+</UserControl>

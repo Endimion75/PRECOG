@@ -1,0 +1,633 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    mc:Ignorable="d"
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008">
+
+    <!-- Expander ToggleButton Brushes -->
+    <LinearGradientBrush x:Key="ExpanderToggleButtonBrush" EndPoint="0.293,0.43" StartPoint="0.742,0.43">
+        <GradientStop Color="#FFD6E8FF" />
+        <GradientStop Color="#FFE2EEFF" Offset="0.539" />
+        <GradientStop Color="#FFD6E8FF" Offset="1" />
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="ExpanderToggleButtonBottomBrush" Color="#FFADD1FF"/>
+    <LinearGradientBrush x:Key="ExpanderToggleButtonHoverBrush" EndPoint="0.667,0.528" StartPoint="0.266,0.528">
+        <GradientStop Color="#FFE3EFFF" Offset="0" />
+        <GradientStop Color="#FFFFFFFF" Offset="0.548" />
+        <GradientStop Color="#FFE3EFFF" Offset="1" />
+    </LinearGradientBrush>
+
+    <SolidColorBrush x:Key="ExpanderToggleArrow2Stroke" Color="#FF567DB1"/>
+    <SolidColorBrush x:Key="ExpanderToggleArrowStroke" Color="#FF567DB1"/>
+
+    <Style x:Key="ExpanderHeaderFocusVisual">
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Border>
+                        <Rectangle SnapsToDevicePixels="true" Margin="0" Stroke="Black" StrokeDashArray="1 2" StrokeThickness="1" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <Style x:Key="ExpanderDownHeaderStyle" TargetType="{x:Type ToggleButton}">
+        <Setter Property="Foreground" Value="#FF15428B" />
+        <Setter Property="FontFamily" Value="Trebuchet MS" />
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Padding" Value="6,0,4,0" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <ControlTemplate.Resources>
+                        <Storyboard x:Key="HoverOn">
+                            <DoubleAnimation Duration="00:00:00.1000000" Storyboard.TargetName="arrow_over" Storyboard.TargetProperty="Opacity" To="1" />
+                            <DoubleAnimation Duration="00:00:00.1000000" Storyboard.TargetName="border_over" Storyboard.TargetProperty="Opacity" To="1" />
+                        </Storyboard>
+                        <Storyboard x:Key="HoverOff">
+                            <DoubleAnimation Duration="00:00:00.4000000" Storyboard.TargetName="arrow_over" Storyboard.TargetProperty="Opacity" To="0" />
+                            <DoubleAnimation Duration="00:00:00.4000000" Storyboard.TargetName="border_over" Storyboard.TargetProperty="Opacity" To="0" />
+                        </Storyboard>
+                        <Storyboard x:Key="CheckedOn">
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00.1000000" Duration="00:00:00.0010000" Storyboard.TargetName="arrow" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)">
+                                <SplineDoubleKeyFrame KeyTime="00:00:00" Value="-1" />
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00.1000000" Duration="00:00:00.0010000" Storyboard.TargetName="arrow2" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)">
+                                <SplineDoubleKeyFrame KeyTime="00:00:00" Value="-1" />
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                        <Storyboard x:Key="CheckedOff">
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00.1000000" Duration="00:00:00.0010000" Storyboard.TargetName="arrow" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)">
+                                <SplineDoubleKeyFrame KeyTime="00:00:00" Value="1" />
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00.1000000" Duration="00:00:00.0010000" Storyboard.TargetName="arrow2" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)">
+                                <SplineDoubleKeyFrame KeyTime="00:00:00" Value="1" />
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                        <Storyboard x:Key="FocusedOn">
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="Focus_Border" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                <SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="1" />
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="arrow_focus" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                <SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="1" />
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                        <Storyboard x:Key="FocusedOff">
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="Focus_Border" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0" />
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="arrow_focus" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0" />
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </ControlTemplate.Resources>
+                    <Grid Background="Transparent">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="20" />
+                        </Grid.ColumnDefinitions>
+                        <Border x:Name="border_fill" Grid.ColumnSpan="2" Background="{DynamicResource ExpanderToggleButtonBrush}"/>
+                        <Border x:Name="border_inner" Margin="0,0,0,1" Grid.ColumnSpan="2" BorderBrush="#FFFFFFFF" BorderThickness="1,1,0,0" />
+                        <Border x:Name="border_bottom" Grid.ColumnSpan="2" BorderBrush="{DynamicResource ExpanderToggleButtonBottomBrush}" BorderThickness="0,0,0,1" />
+                        <Border x:Name="border_over" Margin="1" Grid.ColumnSpan="2" Opacity="0" Background="{DynamicResource ExpanderToggleButtonHoverBrush}"/>
+                        <Rectangle x:Name="arrow_over" Margin="0,1,1,1" Grid.Column="1" Width="20" Opacity="0" Fill="{DynamicResource MouseOverBrush}"/>
+                        <Rectangle x:Name="arrow_focus" Margin="0,1,1,1" Grid.Column="1" Width="20" Opacity="0" Fill="{DynamicResource MouseOverBrush}"/>
+                        <Path x:Name="arrow2" Margin="0,0,6,6" Grid.Column="1" Stroke="{DynamicResource ExpanderToggleArrow2Stroke}" StrokeThickness="1.5" HorizontalAlignment="Right" VerticalAlignment="Center" Data="M 1,1.5 L 4.5,5 L 8,1.5" RenderTransformOrigin="0.5,0.5">
+                            <Path.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform />
+                                    <SkewTransform />
+                                    <RotateTransform />
+                                    <TranslateTransform />
+                                </TransformGroup>
+                            </Path.RenderTransform>
+                        </Path>
+                        <Path x:Name="arrow" Margin="0,2,6,0" Grid.Column="1" Stroke="{DynamicResource ExpanderToggleArrowStroke}" StrokeThickness="1.5" HorizontalAlignment="Right" VerticalAlignment="Center" Data="M 1,1.5 L 4.5,5 L 8,1.5" RenderTransformOrigin="0.5,0.5">
+                            <Path.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform />
+                                    <SkewTransform />
+                                    <RotateTransform />
+                                    <TranslateTransform />
+                                </TransformGroup>
+                            </Path.RenderTransform>
+                        </Path>
+                        <ContentPresenter x:Name="header" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" VerticalAlignment="Center" IsHitTestVisible="false" Margin="6,4,4,4" />
+                        <Border x:Name="Focus_Border" Margin="-1,-1,-1,0" Grid.ColumnSpan="2" BorderBrush="{DynamicResource FocusBrush}" BorderThickness="1" IsHitTestVisible="false" Panel.ZIndex="1" Opacity="0" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard x:Name="FocusedOn_BeginStoryboard" Storyboard="{StaticResource FocusedOn}" />
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard x:Name="FocusedOff_BeginStoryboard" Storyboard="{StaticResource FocusedOff}" />
+                            </Trigger.ExitActions>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="true">
+                            <Trigger.ExitActions>
+                                <BeginStoryboard Storyboard="{StaticResource CheckedOff}" x:Name="CheckedOff_BeginStoryboard" />
+                            </Trigger.ExitActions>
+                            <Trigger.EnterActions>
+                                <BeginStoryboard Storyboard="{StaticResource CheckedOn}" x:Name="CheckedOn_BeginStoryboard" />
+                            </Trigger.EnterActions>
+
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Trigger.ExitActions>
+                                <BeginStoryboard Storyboard="{StaticResource HoverOff}" x:Name="HoverOff_BeginStoryboard" />
+                            </Trigger.ExitActions>
+                            <Trigger.EnterActions>
+                                <BeginStoryboard Storyboard="{StaticResource HoverOn}" />
+                            </Trigger.EnterActions>
+
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true" />
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="ExpanderRightHeaderStyle" TargetType="{x:Type ToggleButton}">
+        <Setter Property="Foreground" Value="#FF15428B" />
+        <Setter Property="FontFamily" Value="Trebuchet MS" />
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Padding" Value="6,0,4,0" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <ControlTemplate.Resources>
+                        <Storyboard x:Key="HoverOn">
+                            <DoubleAnimation Duration="00:00:00.1000000" Storyboard.TargetName="arrow_over" Storyboard.TargetProperty="Opacity" To="1" />
+                            <DoubleAnimation Duration="00:00:00.1000000" Storyboard.TargetName="border_over" Storyboard.TargetProperty="Opacity" To="1" />
+                        </Storyboard>
+                        <Storyboard x:Key="HoverOff">
+                            <DoubleAnimation Duration="00:00:00.4000000" Storyboard.TargetName="arrow_over" Storyboard.TargetProperty="Opacity" To="0" />
+                            <DoubleAnimation Duration="00:00:00.4000000" Storyboard.TargetName="border_over" Storyboard.TargetProperty="Opacity" To="0" />
+                        </Storyboard>
+                        <Storyboard x:Key="CheckedOn">
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00.1000000" Duration="00:00:00.0010000" Storyboard.TargetName="arrow" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)">
+                                <SplineDoubleKeyFrame KeyTime="00:00:00" Value="-1" />
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00.1000000" Duration="00:00:00.0010000" Storyboard.TargetName="arrow2" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)">
+                                <SplineDoubleKeyFrame KeyTime="00:00:00" Value="-1" />
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                        <Storyboard x:Key="CheckedOff">
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00.4000000" Duration="00:00:00.0010000" Storyboard.TargetName="arrow" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)">
+                                <SplineDoubleKeyFrame KeyTime="00:00:00" Value="1" />
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00.4000000" Duration="00:00:00.0010000" Storyboard.TargetName="arrow2" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)">
+                                <SplineDoubleKeyFrame KeyTime="00:00:00" Value="1" />
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                        <Storyboard x:Key="FocusedOn">
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="Focus_Border" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                <SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="1" />
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="arrow_focus" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                <SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="1" />
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                        <Storyboard x:Key="FocusedOff">
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="Focus_Border" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0" />
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="arrow_focus" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0" />
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+
+                    </ControlTemplate.Resources>
+                    <Grid SnapsToDevicePixels="False" Background="Transparent">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="19" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Border x:Name="border_fill" d:LayoutOverrides="GridBox" Grid.ColumnSpan="1" Grid.RowSpan="2" Background="{DynamicResource ExpanderToggleButtonBrush}"/>
+                        <Border x:Name="border_inner" BorderBrush="#FFFFFFFF" BorderThickness="1,1,0,0" d:LayoutOverrides="GridBox" Grid.ColumnSpan="1" Grid.RowSpan="2" />
+                        <Border x:Name="border_bottom" BorderBrush="{DynamicResource ExpanderToggleButtonBrush}" BorderThickness="0,0,0,1" d:LayoutOverrides="GridBox" Grid.ColumnSpan="1" Grid.RowSpan="2" />
+                        <Border x:Name="border_over" Opacity="0" d:LayoutOverrides="GridBox" Grid.ColumnSpan="1" Grid.RowSpan="2" Background="{DynamicResource ExpanderToggleButtonHoverBrush}"/>
+                        <Grid>
+                            <Grid.LayoutTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleX="1" ScaleY="1" />
+                                    <SkewTransform AngleX="0" AngleY="0" />
+                                    <RotateTransform Angle="0" />
+                                    <TranslateTransform X="0" Y="0" />
+                                </TransformGroup>
+                            </Grid.LayoutTransform>
+                            <Rectangle x:Name="arrow_focus" Margin="1" Grid.Column="1" Opacity="0" Fill="{DynamicResource MouseOverBrush}"/>
+                            <Rectangle x:Name="arrow_over" Margin="1" Grid.Column="1" Opacity="0" Fill="{DynamicResource MouseOverBrush}"/>
+                            <Path x:Name="arrow2" Margin="3,0,0,0" Grid.Column="1" Stroke="{DynamicResource ExpanderToggleArrow2Stroke}" StrokeThickness="1.5" HorizontalAlignment="Left" VerticalAlignment="Center" Data="M 1,1.5 L 4.5,5 L 8,1.5" RenderTransformOrigin="0.5,0.5">
+                                <Path.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform />
+                                        <SkewTransform />
+                                        <RotateTransform Angle="-90" />
+                                        <TranslateTransform />
+                                    </TransformGroup>
+                                </Path.RenderTransform>
+                            </Path>
+                            <Path x:Name="arrow" Margin="7,0,0,0" Grid.Column="1" Stroke="{DynamicResource ExpanderToggleArrowStroke}" StrokeThickness="1.5" HorizontalAlignment="Left" VerticalAlignment="Center" Data="M 1,1.5 L 4.5,5 L 8,1.5" RenderTransformOrigin="0.5,0.5">
+                                <Path.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform />
+                                        <SkewTransform />
+                                        <RotateTransform Angle="-90" />
+                                        <TranslateTransform />
+                                    </TransformGroup>
+                                </Path.RenderTransform>
+                            </Path>
+                        </Grid>
+                        <ContentPresenter SnapsToDevicePixels="True" HorizontalAlignment="Center" Margin="4,4,4,6" VerticalAlignment="Top" Grid.Row="1" RecognizesAccessKey="True">
+                            <ContentPresenter.LayoutTransform>
+                                <TransformGroup>
+                                    <TransformGroup.Children>
+                                        <TransformCollection>
+                                            <RotateTransform Angle="-90" />
+                                        </TransformCollection>
+                                    </TransformGroup.Children>
+                                </TransformGroup>
+                            </ContentPresenter.LayoutTransform>
+                        </ContentPresenter>
+                        <Border x:Name="Focus_Border" Margin="-1,-1,0,-1" Grid.ColumnSpan="2" BorderBrush="{DynamicResource FocusBrush}" BorderThickness="1" IsHitTestVisible="false" Opacity="0" Panel.ZIndex="1" Grid.RowSpan="2" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard x:Name="FocusedOn_BeginStoryboard" Storyboard="{StaticResource FocusedOn}" />
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard x:Name="FocusedOff_BeginStoryboard" Storyboard="{StaticResource FocusedOff}" />
+                            </Trigger.ExitActions>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="true">
+                            <Trigger.ExitActions>
+                                <BeginStoryboard Storyboard="{StaticResource CheckedOff}" x:Name="CheckedOff_BeginStoryboard" />
+                            </Trigger.ExitActions>
+                            <Trigger.EnterActions>
+                                <BeginStoryboard Storyboard="{StaticResource CheckedOn}" x:Name="CheckedOn_BeginStoryboard" />
+                            </Trigger.EnterActions>
+
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Trigger.ExitActions>
+                                <BeginStoryboard Storyboard="{StaticResource HoverOff}" x:Name="HoverOff_BeginStoryboard" />
+                            </Trigger.ExitActions>
+                            <Trigger.EnterActions>
+                                <BeginStoryboard Storyboard="{StaticResource HoverOn}" />
+                            </Trigger.EnterActions>
+
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true" />
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="ExpanderUpHeaderStyle" TargetType="{x:Type ToggleButton}">
+        <Setter Property="Foreground" Value="#FF15428B" />
+        <Setter Property="FontFamily" Value="Trebuchet MS" />
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Padding" Value="6,0,4,0" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <ControlTemplate.Resources>
+                        <Storyboard x:Key="HoverOn">
+                            <DoubleAnimation Duration="00:00:00.1000000" Storyboard.TargetName="arrow_over" Storyboard.TargetProperty="Opacity" To="1" />
+                            <DoubleAnimation Duration="00:00:00.1000000" Storyboard.TargetName="border_over" Storyboard.TargetProperty="Opacity" To="1" />
+                        </Storyboard>
+                        <Storyboard x:Key="HoverOff">
+                            <DoubleAnimation Duration="00:00:00.4000000" Storyboard.TargetName="arrow_over" Storyboard.TargetProperty="Opacity" To="0" />
+                            <DoubleAnimation Duration="00:00:00.4000000" Storyboard.TargetName="border_over" Storyboard.TargetProperty="Opacity" To="0" />
+                        </Storyboard>
+                        <Storyboard x:Key="CheckedOn">
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00.1000000" Duration="00:00:00.0010000" Storyboard.TargetName="arrow" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)">
+                                <SplineDoubleKeyFrame KeyTime="00:00:00" Value="-1" />
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00.1000000" Duration="00:00:00.0010000" Storyboard.TargetName="arrow2" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)">
+                                <SplineDoubleKeyFrame KeyTime="00:00:00" Value="-1" />
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                        <Storyboard x:Key="CheckedOff">
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00.4000000" Duration="00:00:00.0010000" Storyboard.TargetName="arrow" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)">
+                                <SplineDoubleKeyFrame KeyTime="00:00:00" Value="1" />
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00.4000000" Duration="00:00:00.0010000" Storyboard.TargetName="arrow2" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)">
+                                <SplineDoubleKeyFrame KeyTime="00:00:00" Value="1" />
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                        <Storyboard x:Key="FocusedOn">
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="Focus_Border" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                <SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="1" />
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="arrow_focus" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                <SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="1" />
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                        <Storyboard x:Key="FocusedOff">
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="Focus_Border" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0" />
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="arrow_focus" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0" />
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+
+                    </ControlTemplate.Resources>
+                    <Grid Background="Transparent">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="20" />
+                        </Grid.ColumnDefinitions>
+                        <Border x:Name="border_fill" Grid.ColumnSpan="2" Background="{DynamicResource ExpanderToggleButtonBrush}"/>
+                        <Border x:Name="border_inner" Margin="0,1,0,0" Grid.ColumnSpan="2" BorderBrush="#FFFFFFFF" BorderThickness="1,0,0,1" />
+                        <Border x:Name="border_bottom" Grid.ColumnSpan="2" BorderBrush="{DynamicResource ExpanderToggleButtonBottomBrush}" BorderThickness="0,1,0,0" />
+                        <Border x:Name="border_over" Margin="1" Grid.ColumnSpan="2" Opacity="0" Background="{DynamicResource ExpanderToggleButtonHoverBrush}"/>
+                        <Rectangle x:Name="arrow_over" Margin="0,1,1,1" Grid.Column="1" Width="20" Opacity="0" Fill="{DynamicResource MouseOverBrush}"/>
+                        <Rectangle x:Name="arrow_focus" Margin="0,1,1,1" Grid.Column="1" Width="20" Opacity="0" Fill="{DynamicResource MouseOverBrush}"/>
+                        <Path x:Name="arrow2" Margin="0,4,6,0" Grid.Column="1" Stroke="{DynamicResource ExpanderToggleArrow2Stroke}" StrokeThickness="1.5" HorizontalAlignment="Right" VerticalAlignment="Center" Data="M 1,1.5 L 4.5,5 L 8,1.5" RenderTransformOrigin="0.5,0.5">
+                            <Path.LayoutTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleX="1" ScaleY="1" />
+                                    <SkewTransform AngleX="0" AngleY="0" />
+                                    <RotateTransform Angle="180" />
+                                    <TranslateTransform X="0" Y="0" />
+                                </TransformGroup>
+                            </Path.LayoutTransform>
+                            <Path.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleY="-1" />
+                                    <SkewTransform />
+                                    <RotateTransform />
+                                    <TranslateTransform />
+                                </TransformGroup>
+                            </Path.RenderTransform>
+                        </Path>
+                        <Path x:Name="arrow" Margin="0,0,6,4" Grid.Column="1" Stroke="{DynamicResource ExpanderToggleArrowStroke}" StrokeThickness="1.5" HorizontalAlignment="Right" VerticalAlignment="Center" Data="M 1,1.5 L 4.5,5 L 8,1.5" RenderTransformOrigin="0.5,0.5">
+                            <Path.LayoutTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleX="1" ScaleY="1" />
+                                    <SkewTransform AngleX="0" AngleY="0" />
+                                    <RotateTransform Angle="180" />
+                                    <TranslateTransform X="0" Y="0" />
+                                </TransformGroup>
+                            </Path.LayoutTransform>
+                            <Path.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleY="-1" />
+                                    <SkewTransform />
+                                    <RotateTransform />
+                                    <TranslateTransform />
+                                </TransformGroup>
+                            </Path.RenderTransform>
+                        </Path>
+                        <ContentPresenter SnapsToDevicePixels="True" HorizontalAlignment="Center" Margin="6,4,4,4" VerticalAlignment="Top" Grid.Row="1" RecognizesAccessKey="True" />
+                        <Border x:Name="Focus_Border" Margin="-1,0,-1,-1" Grid.ColumnSpan="2" BorderBrush="{DynamicResource FocusBrush}" BorderThickness="1" IsHitTestVisible="false" Visibility="Visible" Canvas.ZIndex="1" Opacity="0" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard x:Name="FocusedOn_BeginStoryboard" Storyboard="{StaticResource FocusedOn}" />
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard x:Name="FocusedOff_BeginStoryboard" Storyboard="{StaticResource FocusedOff}" />
+                            </Trigger.ExitActions>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="true">
+                            <Trigger.ExitActions>
+                                <BeginStoryboard Storyboard="{StaticResource CheckedOff}" x:Name="CheckedOff_BeginStoryboard" />
+                            </Trigger.ExitActions>
+                            <Trigger.EnterActions>
+                                <BeginStoryboard Storyboard="{StaticResource CheckedOn}" x:Name="CheckedOn_BeginStoryboard" />
+                            </Trigger.EnterActions>
+
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Trigger.ExitActions>
+                                <BeginStoryboard Storyboard="{StaticResource HoverOff}" x:Name="HoverOff_BeginStoryboard" />
+                            </Trigger.ExitActions>
+                            <Trigger.EnterActions>
+                                <BeginStoryboard Storyboard="{StaticResource HoverOn}" />
+                            </Trigger.EnterActions>
+
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true" />
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="ExpanderLeftHeaderStyle" TargetType="{x:Type ToggleButton}">
+        <Setter Property="Foreground" Value="#FF15428B" />
+        <Setter Property="FontFamily" Value="Trebuchet MS" />
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Padding" Value="6,0,4,0" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <ControlTemplate.Resources>
+                        <Storyboard x:Key="HoverOn">
+                            <DoubleAnimation Duration="00:00:00.1000000" Storyboard.TargetName="arrow_over" Storyboard.TargetProperty="Opacity" To="1" />
+                            <DoubleAnimation Duration="00:00:00.1000000" Storyboard.TargetName="border_over" Storyboard.TargetProperty="Opacity" To="1" />
+                        </Storyboard>
+                        <Storyboard x:Key="HoverOff">
+                            <DoubleAnimation Duration="00:00:00.4000000" Storyboard.TargetName="arrow_over" Storyboard.TargetProperty="Opacity" To="0" />
+                            <DoubleAnimation Duration="00:00:00.4000000" Storyboard.TargetName="border_over" Storyboard.TargetProperty="Opacity" To="0" />
+                        </Storyboard>
+                        <Storyboard x:Key="CheckedOn">
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00.1000000" Duration="00:00:00.0010000" Storyboard.TargetName="arrow" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)">
+                                <SplineDoubleKeyFrame KeyTime="00:00:00" Value="-1" />
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00.1000000" Duration="00:00:00.0010000" Storyboard.TargetName="arrow2" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)">
+                                <SplineDoubleKeyFrame KeyTime="00:00:00" Value="-1" />
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                        <Storyboard x:Key="CheckedOff">
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00.4000000" Duration="00:00:00.0010000" Storyboard.TargetName="arrow" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)">
+                                <SplineDoubleKeyFrame KeyTime="00:00:00" Value="1" />
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00.4000000" Duration="00:00:00.0010000" Storyboard.TargetName="arrow2" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)">
+                                <SplineDoubleKeyFrame KeyTime="00:00:00" Value="1" />
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                        <Storyboard x:Key="FocusedOn">
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="Focus_Border" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                <SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="1" />
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="arrow_focus" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                <SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="1" />
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                        <Storyboard x:Key="FocusedOff">
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="Focus_Border" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0" />
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="arrow_focus" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0" />
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+
+                    </ControlTemplate.Resources>
+                    <Grid SnapsToDevicePixels="False" Background="Transparent">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="19" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Border x:Name="border_fill" Grid.RowSpan="2" Background="{DynamicResource ExpanderToggleButtonBrush}"/>
+                        <Border x:Name="border_inner" BorderBrush="#FFFFFFFF" BorderThickness="0,1,1,0" Grid.RowSpan="2" />
+                        <Border x:Name="border_bottom" BorderBrush="{DynamicResource ExpanderToggleButtonBottomBrush}" BorderThickness="0,0,0,1" Grid.RowSpan="2" />
+                        <Border x:Name="border_over" Opacity="0" Grid.RowSpan="2" Background="{DynamicResource ExpanderToggleButtonHoverBrush}"/>
+                        <Grid>
+                            <Grid.LayoutTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleX="1" ScaleY="1" />
+                                    <SkewTransform AngleX="0" AngleY="0" />
+                                    <RotateTransform Angle="0" />
+                                    <TranslateTransform X="0" Y="0" />
+                                </TransformGroup>
+                            </Grid.LayoutTransform>
+                            <Rectangle x:Name="arrow_over" Margin="1" Opacity="0" Fill="{DynamicResource MouseOverBrush}"/>
+                            <Rectangle x:Name="arrow_focus" Margin="1" Opacity="0" Fill="{DynamicResource MouseOverBrush}"/>
+                            <Path x:Name="arrow2" Margin="3,0,0,0" Stroke="{DynamicResource ExpanderToggleArrow2Stroke}" StrokeThickness="1.5" HorizontalAlignment="Left" VerticalAlignment="Center" Data="M 1,1.5 L 4.5,5 L 8,1.5" RenderTransformOrigin="0.5,0.5">
+                                <Path.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform />
+                                        <SkewTransform />
+                                        <RotateTransform Angle="90" />
+                                        <TranslateTransform />
+                                    </TransformGroup>
+                                </Path.RenderTransform>
+                            </Path>
+                            <Path x:Name="arrow" Margin="7,0,0,0" Stroke="{DynamicResource ExpanderToggleArrowStroke}" StrokeThickness="1.5" HorizontalAlignment="Left" VerticalAlignment="Center" Data="M 1,1.5 L 4.5,5 L 8,1.5" RenderTransformOrigin="0.5,0.5">
+                                <Path.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform />
+                                        <SkewTransform />
+                                        <RotateTransform Angle="90" />
+                                        <TranslateTransform />
+                                    </TransformGroup>
+                                </Path.RenderTransform>
+                            </Path>
+                        </Grid>
+                        <ContentPresenter SnapsToDevicePixels="True" HorizontalAlignment="Center" Margin="6,4,4,4" VerticalAlignment="Top" Grid.Row="1" RecognizesAccessKey="True">
+                            <ContentPresenter.LayoutTransform>
+                                <TransformGroup>
+                                    <TransformGroup.Children>
+                                        <TransformCollection>
+                                            <RotateTransform Angle="90" />
+                                        </TransformCollection>
+                                    </TransformGroup.Children>
+                                </TransformGroup>
+                            </ContentPresenter.LayoutTransform>
+                        </ContentPresenter>
+                        <Border x:Name="Focus_Border" Margin="0,-1,-1,-1" Grid.RowSpan="2" BorderBrush="{DynamicResource FocusBrush}" BorderThickness="1" IsHitTestVisible="false" Opacity="0" Panel.ZIndex="1" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard x:Name="FocusedOn_BeginStoryboard" Storyboard="{StaticResource FocusedOn}" />
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard x:Name="FocusedOff_BeginStoryboard" Storyboard="{StaticResource FocusedOff}" />
+                            </Trigger.ExitActions>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="true">
+                            <Trigger.ExitActions>
+                                <BeginStoryboard Storyboard="{StaticResource CheckedOff}" x:Name="CheckedOff_BeginStoryboard" />
+                            </Trigger.ExitActions>
+                            <Trigger.EnterActions>
+                                <BeginStoryboard Storyboard="{StaticResource CheckedOn}" x:Name="CheckedOn_BeginStoryboard" />
+                            </Trigger.EnterActions>
+
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Trigger.ExitActions>
+                                <BeginStoryboard Storyboard="{StaticResource HoverOff}" x:Name="HoverOff_BeginStoryboard" />
+                            </Trigger.ExitActions>
+                            <Trigger.EnterActions>
+                                <BeginStoryboard Storyboard="{StaticResource HoverOn}" />
+                            </Trigger.EnterActions>
+
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true" />
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="ExpanderBlueStyle" TargetType="{x:Type Expander}">
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Foreground" Value="#FF15428B" />
+        <!--<Setter Property="FontFamily" Value="Trebuchet MS" />-->
+        <!--<Setter Property="FontSize" Value="11" />-->
+        <Setter Property="FontWeight" Value="Normal" />
+        <Setter Property="Padding" Value="6,0,4,0" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Expander}">
+                    <Grid>
+                        <Border x:Name="Background" BorderThickness="1" Padding="0">
+
+                            <DockPanel>
+                                <ToggleButton FontFamily="{TemplateBinding FontFamily}" FontSize="{TemplateBinding FontSize}" FontStretch="{TemplateBinding FontStretch}" FontStyle="{TemplateBinding FontStyle}" FontWeight="Bold" Foreground="{TemplateBinding Foreground}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Padding="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" FocusVisualStyle="{StaticResource ExpanderHeaderFocusVisual}" Margin="1,1,1,0" MinHeight="0" MinWidth="0" x:Name="HeaderSite" Style="{StaticResource ExpanderDownHeaderStyle}" Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}" IsChecked="{Binding Path=IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" DockPanel.Dock="Top" />
+                                <Border Visibility="Collapsed" x:Name="border" Margin="1,1,1,1" BorderBrush="{DynamicResource GlyphBrush}" BorderThickness="1,1,1,1" CornerRadius="1,1,1,1" Background="{DynamicResource ControlBackgroundBrush}">
+                                    <ContentPresenter Focusable="false" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="1,1,1,1" x:Name="ExpandSite" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" DockPanel.Dock="Bottom" />
+                                </Border>
+                            </DockPanel>
+                        </Border>
+                        <Border x:Name="DisabledVisualElement" IsHitTestVisible="false" Background="{DynamicResource DisabledBackgroundBrush}" BorderBrush="{DynamicResource DisabledBorderBrush}" BorderThickness="1" Opacity="0" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsExpanded" Value="true">
+                            <Setter Property="Visibility" TargetName="border" Value="Visible" />
+                        </Trigger>
+                        <Trigger Property="ExpandDirection" Value="Down" />
+                        <Trigger Property="ExpandDirection" Value="Right">
+                            <Setter Property="DockPanel.Dock" TargetName="ExpandSite" Value="Right" />
+                            <Setter Property="DockPanel.Dock" TargetName="HeaderSite" Value="Left" />
+                            <Setter Property="Style" TargetName="HeaderSite" Value="{StaticResource ExpanderRightHeaderStyle}" />
+                        </Trigger>
+                        <Trigger Property="ExpandDirection" Value="Up">
+                            <Setter Property="DockPanel.Dock" TargetName="ExpandSite" Value="Top" />
+                            <Setter Property="DockPanel.Dock" TargetName="HeaderSite" Value="Bottom" />
+                            <Setter Property="Style" TargetName="HeaderSite" Value="{StaticResource ExpanderUpHeaderStyle}" />
+                        </Trigger>
+                        <Trigger Property="ExpandDirection" Value="Left">
+                            <Setter Property="DockPanel.Dock" TargetName="ExpandSite" Value="Left" />
+                            <Setter Property="DockPanel.Dock" TargetName="HeaderSite" Value="Right" />
+                            <Setter Property="Style" TargetName="HeaderSite" Value="{StaticResource ExpanderLeftHeaderStyle}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                            <Setter Property="Opacity" TargetName="DisabledVisualElement" Value="1" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

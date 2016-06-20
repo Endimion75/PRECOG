@@ -1,0 +1,103 @@
+﻿<UserControl x:Class="Precog.Controls.ProcessData"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="342" d:DesignWidth="261">
+    <DockPanel Name="MainPanel">
+        <GroupBox Header="Process Data" DockPanel.Dock="Top">
+            <StackPanel>
+                <StackPanel Margin="0,5">
+                    <StackPanel>
+                        <TextBlock TextWrapping="WrapWithOverflow" FontWeight="Bold">Please make sure you set the blank and calibration function according to your experiment!</TextBlock>
+                    </StackPanel>
+                    <Grid >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Label Height="23" Content="Macro:"  Grid.Column="0" Grid.Row="0" Margin="0,5" />
+                        <ComboBox Height="23" Name="cbMacro" Grid.Column="1" Grid.Row="0"  />
+                        <Label Height="23" Content="Blank:"  Grid.Column="0" Grid.Row="1" Margin="0,5"/>
+                        <TextBox Grid.Column="1" Grid.Row="1" Height="23" HorizontalAlignment="Left" Name="txBlank" Width="56" PreviewTextInput="txtNumericType_PreviewTextInput" DataObject.Pasting="TextBoxPasting" />
+                    </Grid>
+                    <GroupBox Header="True OD Calibartion Functions">
+                        <StackPanel Margin="0,4">
+                            <ComboBox Name="cbCalFunctions" SelectionChanged="CbCalFunctions_OnSelectionChanged" />
+                            <StackPanel Name="stCustomFunction" Margin="0,8,0,8" Visibility="Collapsed">
+                                <StackPanel >
+                                    <StackPanel Orientation="Horizontal" Margin="5,0">
+                                        <TextBlock>y =</TextBlock>
+                                        <TextBox Name="txtCoeffA" Width="45" PreviewTextInput="txtNumericType_PreviewTextInput" DataObject.Pasting="TextBoxPasting"/>
+                                        <TextBlock>x</TextBlock>
+                                        <TextBlock>+</TextBlock>
+                                        <TextBox Name="txtCoeffB" Width="45" PreviewTextInput="txtNumericType_PreviewTextInput" DataObject.Pasting="TextBoxPasting"/>
+                                        <TextBlock>x</TextBlock>
+                                        <TextBlock Text="2">
+                                            <TextBlock.LayoutTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform ScaleX=".75" ScaleY=".75"/>
+                                                    <TranslateTransform Y="-5"/>
+                                                </TransformGroup>
+                                            </TextBlock.LayoutTransform>
+                                        </TextBlock>
+                                        <TextBlock> +</TextBlock>
+                                        <TextBox Name="txtCoeffC" Width="45" PreviewTextInput="txtNumericType_PreviewTextInput" DataObject.Pasting="TextBoxPasting"/>
+                                        <TextBlock Text="x"/>
+                                        <TextBlock Text="3">
+                                            <TextBlock.LayoutTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform ScaleX=".75" ScaleY=".75"/>
+                                                    <TranslateTransform Y="-5"/>
+                                                </TransformGroup>
+                                            </TextBlock.LayoutTransform>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                            <!--<Button Content="Add function" Height="23" Width="81" />-->
+                        </StackPanel>
+                    </GroupBox>
+                </StackPanel>
+                <StackPanel HorizontalAlignment="Center" Margin="10" >
+                    <Button Content="Set" Name="btnSet" Width="65" Click="btnSet_Click"></Button>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+        <!--<GroupBox Header="Neural Network Fit" DockPanel.Dock="Top">
+            <Grid >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Label Height="23" Content="Blank:"  Grid.Column="0" Grid.Row="0" />
+                <TextBox Grid.Column="1" Grid.Row="0" Height="23" HorizontalAlignment="Left" Name="txBlank" Width="56" PreviewTextInput="txtNumericType_PreviewTextInput" DataObject.Pasting="TextBoxPasting" />
+
+                <Label Height="23" Content="learningRate:"  Grid.Column="0" Grid.Row="1" />
+                <TextBox Grid.Column="1" Grid.Row="1" Height="23" HorizontalAlignment="Left" Name="txLearningRate" Width="56" PreviewTextInput="txtNumericType_PreviewTextInput" DataObject.Pasting="TextBoxPasting"/>
+
+                <Label Height="23" Content="sigmoidAlphaValue:"  Grid.Column="0" Grid.Row="2" />
+                <TextBox Grid.Column="1" Grid.Row="2" Height="23" HorizontalAlignment="Left" Name="txSigmoidAlphaValue" Width="56" PreviewTextInput="txtNumericType_PreviewTextInput" DataObject.Pasting="TextBoxPasting"/>
+
+                <Label Height="23" Content="neuronsInFirstLayer:"  Grid.Column="0" Grid.Row="3" />
+                <TextBox Grid.Column="1" Grid.Row="3" Height="23" HorizontalAlignment="Left" Name="txNeuronsInFirstLayer" Width="56" PreviewTextInput="txtNumericType_PreviewTextInput" DataObject.Pasting="TextBoxPasting"/>
+
+                <Label Height="23" Content="iterations:"  Grid.Column="0" Grid.Row="4" />
+                <TextBox Grid.Column="1" Grid.Row="4" Height="23" HorizontalAlignment="Left" Name="txIterations" Width="56" PreviewTextInput="txtNumericType_PreviewTextInput" DataObject.Pasting="TextBoxPasting" />
+            </Grid>
+        </GroupBox>-->
+    </DockPanel>
+</UserControl>

@@ -1,0 +1,53 @@
+﻿<UserControl x:Class="Precog.Controls.ZoomGraphControls"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="324" d:DesignWidth="183">
+    <Grid>
+        <StackPanel Name="RootStack" HorizontalAlignment="Left">
+            <GroupBox Header="Data">
+                <StackPanel>
+                    <CheckBox Content="Display Raw" Margin="5" x:Name="ckDisplayRaw" HorizontalAlignment="Left" VerticalAlignment="Bottom" Checked="ckDisplayRaw_Checked"  />
+                    <CheckBox Content="Display First Derivative" Margin="5,0" x:Name="ckDisplayFD" HorizontalAlignment="Left" VerticalAlignment="Bottom" Checked="ckDisplayFD_Checked" />
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Display Macro MetaData">
+                <StackPanel Margin="5" Orientation="Horizontal" VerticalAlignment="Bottom">
+                    <CheckBox Content="Lag" IsChecked="False" x:Name="ckDisplayMetaDataLag" HorizontalAlignment="Left" Margin="5"  />
+                    <CheckBox Content="GT" IsChecked="False" x:Name="ckDisplayMetaDataRate" HorizontalAlignment="Left" Margin="5" />
+                    <CheckBox Content="Yield" IsChecked="False" x:Name="ckDisplayMetaDataYield" HorizontalAlignment="Left" Margin="5" />
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Log Y Axis">
+                <CheckBox Name="ckLogYAxis" Content="Log Y Axis" Margin="5" />
+            </GroupBox>
+            <GroupBox Header="Scale">
+                
+            </GroupBox>
+            <GroupBox Header="Operations">
+                <DockPanel Margin="0,5">
+                    <StackPanel Margin="5" Orientation="Horizontal" VerticalAlignment="Bottom" DockPanel.Dock="Top" HorizontalAlignment="Center">
+                        <RadioButton Content="Zoom" IsChecked="True" x:Name="rbZoom" HorizontalAlignment="Left" Margin="5"  />
+                        <RadioButton Content="Move" x:Name="rbPan" HorizontalAlignment="Left" Margin="5" />
+                    </StackPanel>
+                    <StackPanel Visibility="Collapsed" >
+                        <Button x:Name="btnZoomFit" Content="Zoom to fit" DockPanel.Dock="Bottom" HorizontalAlignment="Center" Margin="0,0,0,5" Click="btnZoomFit_Click"  />
+                    </StackPanel>
+                    <StackPanel HorizontalAlignment="Center">
+                        <Label Content="Tip: Double-click to restore zoom" FontSize="10" Visibility="{Binding IsChecked, Converter={StaticResource BoolToVisibilityConverter}, ElementName=rbZoom}" />
+                    </StackPanel>
+                    
+                </DockPanel>
+                
+                
+            </GroupBox>
+            <GroupBox Header="Fit Data" Visibility="Collapsed">
+                <StackPanel Orientation="Vertical" >
+                    <Button Name="btnFitData" Content="Fit" Width="70" Margin="5" Click="btnFitData_Click"  />
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+    </Grid>
+</UserControl>

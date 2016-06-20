@@ -1,0 +1,412 @@
+﻿<Window x:Class="Precog.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:utils="clr-namespace:Precog.Utils"
+        xmlns:local="clr-namespace:Precog" 
+        xmlns:controls="clr-namespace:Precog.Controls"
+        xmlns:cm="clr-namespace:System.ComponentModel;assembly=System"
+        xmlns:Microsoft_Windows_Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
+        xmlns:CustCommands="clr-namespace:Precog.Commands"
+        Title="PRECOG" Height="570" Width="882"
+        ResizeMode="CanResizeWithGrip" Icon="/Precog;component/Images/PrecogSymbol.ico">
+    
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        <utils:ArithmeticConverter x:Key="AScript"/>
+        <utils:InvertBooleanConverter x:Key="boolConvert" />
+        <utils:SelectedIndexToVisibilityConverter x:Key="SelectedIndexToVisibilityConverter" />
+        <utils:WidthToBooleanConverter x:Key="widthToBool" />
+        <utils:BooleanToWidthConverter x:Key="boolToWidth"/>
+        
+        <Style x:Key="ItemHighlightWhenSelected" TargetType="{x:Type ListBoxItem}">
+            <Setter Property="Control.Padding" Value="0"></Setter>
+            <Style.Triggers>
+                <Trigger Property="ListBoxItem.IsSelected" Value="True">
+                    <Setter Property="ListBoxItem.Background" Value="LightSteelBlue" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <DataTemplate x:Key="RoundPlatesItems">
+            <Grid Margin="0" Background="White" MaxWidth="245">
+                <Border Margin="5" 
+                        BorderThickness="2" 
+                        BorderBrush="SteelBlue" 
+                        Background="{Binding RelativeSource=
+                                        {
+                                            RelativeSource 
+                                            Mode=FindAncestor, 
+                                            AncestorType={x:Type ListBoxItem}
+                                        }, 
+                                        Path=Background
+                                        }" 
+                        CornerRadius="4">
+                    <Grid Margin="3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <TextBlock FontWeight="Bold" Text="{Binding Path=ImportFileName}"></TextBlock>
+                        <TextBlock Grid.Row="1" TextWrapping="Wrap" Text="{Binding Path=Name}"></TextBlock>
+                        <TextBlock Grid.Row="2" Text="{Binding Path=CreationDate}"></TextBlock>
+                    </Grid>
+                </Border>
+            </Grid>
+        </DataTemplate>
+
+        <local:TileView x:Key="ImageView" SelectedBackground="LightSteelBlue">
+            <local:TileView.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderThickness="1" BorderBrush="Gray" CornerRadius="5" Margin="3">
+                        <StackPanel VerticalAlignment="Top">
+                            <TextBlock TextWrapping="Wrap" FontWeight="Bold" HorizontalAlignment="Center"  Text="{Binding Path=Container}" Margin="3" />
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"  >
+                                <Image x:Name="GraphImage" Source="{Binding GraphImageSource}" HorizontalAlignment="Center" Width="96" Height="96" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>    
+                </DataTemplate>
+            </local:TileView.ItemTemplate>
+        </local:TileView>
+
+        <local:TileView x:Key="ImageDetailView" SelectedBackground="LightSteelBlue">
+            <local:TileView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Col2"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Border BorderThickness="1" BorderBrush="Gray"  CornerRadius="5" Margin="3">
+                            <DockPanel HorizontalAlignment="Center" LastChildFill="False">
+                                <DockPanel Dock="Top">
+                                    <TextBlock FontWeight="Bold" Text="{Binding Path=Container}" HorizontalAlignment="Center"/>
+                                </DockPanel>
+                                <DockPanel Dock="Left">
+                                    <Image x:Name="GraphImage" Source="{Binding GraphImageSource}" HorizontalAlignment="Center" Width="96" Height="96" />
+                                </DockPanel>
+                                <DockPanel Dock="Right">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Path=Lag, StringFormat={}Lag: {0:0.00}}" Margin="5"/>
+                                        <TextBlock Text="{Binding Path=Rate, StringFormat={}Rate: {0:0.00}}" Margin="5"/>
+                                        <TextBlock Text="{Binding Path=Yield, StringFormat={}Efficiency: {0:0.00}}" Margin="5"/>
+                                    </StackPanel>
+                                </DockPanel>
+                            </DockPanel>
+                        </Border>
+                    </Grid>
+                </DataTemplate>
+            </local:TileView.ItemTemplate>
+        </local:TileView>
+        
+        <GridView x:Key="GridView">
+            <GridView.Columns>
+                <GridViewColumn Width="0"  DisplayMemberBinding="{Binding Path=ContainerIndex}" >
+                    <GridViewColumnHeader Visibility="Collapsed"  Content="Index" Click="SortHeader_Click" Tag="ContainerIndex" />
+                </GridViewColumn>
+                <GridViewColumn DisplayMemberBinding="{Binding Path=Container}">
+                    <GridViewColumnHeader Width="120" Content="Container Name" Click="SortHeader_Click" Tag="ContainerName" />
+                </GridViewColumn>
+                <GridViewColumn DisplayMemberBinding="{Binding Path=Lag, StringFormat={}{0:0.00}}">
+                    <GridViewColumnHeader Width="70" Content="Lag (h)" Click="SortHeader_Click" Tag="Lag" />
+                </GridViewColumn>
+                <GridViewColumn DisplayMemberBinding="{Binding Path=Rate, StringFormat={}{0:0.00}}">
+                    <GridViewColumnHeader Width="70" Content="Rate (h)" Click="SortHeader_Click" Tag="Rate" />
+                </GridViewColumn>
+                <GridViewColumn  DisplayMemberBinding="{Binding Path=Yield, StringFormat={}{0:0.00}}">
+                    <GridViewColumnHeader Width="120" Content="Efficiency (&#916;OD)" Click="SortHeader_Click" Tag="Yield" />
+                </GridViewColumn>
+                <GridViewColumn Header="Flags" Width="60">
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Source="Images/WarningHS.png" ToolTip="{Binding Path=QualityIndex.FlagDetails}" Visibility="{Binding Path=QualityIndex.HasFlags, Converter={StaticResource BoolToVis}}" Height="16" Width="16"></Image>
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+            </GridView.Columns>
+        </GridView>
+
+        <GridView x:Key="GridViewQIdx">
+            <GridView.Columns>
+                <GridViewColumn Width="0"  DisplayMemberBinding="{Binding Path=ContainerIndex}" >
+                    <GridViewColumnHeader Visibility="Collapsed"  Content="Index" Click="SortHeader_Click" Tag="ContainerIndex" />
+                </GridViewColumn>
+                <GridViewColumn DisplayMemberBinding="{Binding Path=Container}">
+                    <GridViewColumnHeader Width="120" Content="Container Name" Click="SortHeader_Click" Tag="ContainerName" />
+                </GridViewColumn>
+                <GridViewColumn DisplayMemberBinding="{Binding Path=Lag, StringFormat={}{0:0.00}}">
+                    <GridViewColumnHeader Width="50" Content="Lag (h)" Click="SortHeader_Click" Tag="Lag" />
+                </GridViewColumn>
+                <GridViewColumn DisplayMemberBinding="{Binding Path=Rate, StringFormat={}{0:0.00}}">
+                    <GridViewColumnHeader Width="50" Content="Rate (h)" Click="SortHeader_Click" Tag="Rate" />
+                </GridViewColumn>
+                <GridViewColumn  DisplayMemberBinding="{Binding Path=Yield, StringFormat={}{0:0.00}}">
+                    <GridViewColumnHeader Width="60" Content="Efficiency (&#916;OD)" Click="SortHeader_Click" Tag="Yield" />
+                </GridViewColumn>
+                <GridViewColumn  DisplayMemberBinding="{Binding Path=QualityIndex.R2, StringFormat={}{0:0.00}}">
+                    <GridViewColumnHeader Width="70" Content="QIdx R2" Click="SortHeader_Click" Tag="QualityIndex.R2" />
+                </GridViewColumn>
+                <GridViewColumn  DisplayMemberBinding="{Binding Path=QualityIndex.R2Worst, StringFormat={}{0:0.00}}">
+                    <GridViewColumnHeader Width="70" Content="QIdx Worst R2" Click="SortHeader_Click" Tag="QualityIndex.R2Worst" />
+                </GridViewColumn>
+                <GridViewColumn  DisplayMemberBinding="{Binding Path=QualityIndex.R2Peaks, StringFormat={}{0:0}}">
+                    <GridViewColumnHeader Width="70" Content="QIdx Peaks" Click="SortHeader_Click" Tag="QualityIndex.R2Peaks" />
+                </GridViewColumn>
+                <GridViewColumn  DisplayMemberBinding="{Binding Path=QualityIndex.PointDifference, StringFormat={}{0:0.00}}">
+                    <GridViewColumnHeader Width="70" Content="QIdx PDiff" Click="SortHeader_Click" Tag="QualityIndex.PointDifference" />
+                </GridViewColumn>
+            </GridView.Columns>
+        </GridView>
+
+        <GridView x:Key="GridViewSamples">
+            <GridView.Columns>
+                <GridViewColumn Width="0"  DisplayMemberBinding="{Binding Path=ContainerIndex}" >
+                    <GridViewColumnHeader Visibility="Collapsed"  Content="Index" Click="SortHeader_Click" Tag="ContainerIndex" />
+                </GridViewColumn>
+                <GridViewColumn DisplayMemberBinding="{Binding Path=Container}">
+                    <GridViewColumnHeader Content="Container Name" Click="SortHeader_Click" Tag="ContainerName" />
+                </GridViewColumn>
+                <GridViewColumn DisplayMemberBinding="{Binding Path=Lag, StringFormat={}{0:0.00}}">
+                    <GridViewColumnHeader Content="Lag (h)" Click="SortHeader_Click" Tag="Lag" />
+                </GridViewColumn>
+                <GridViewColumn DisplayMemberBinding="{Binding Path=Rate, StringFormat={}{0:0.00}}">
+                    <GridViewColumnHeader Content="Rate (h)" Click="SortHeader_Click" Tag="Rate" />
+                </GridViewColumn>
+                <GridViewColumn  DisplayMemberBinding="{Binding Path=Yield, StringFormat={}{0:0.00}}">
+                    <GridViewColumnHeader Content="Efficiency (&#916;OD)" Click="SortHeader_Click" Tag="Yield" />
+                </GridViewColumn>
+                <GridViewColumn DisplayMemberBinding="{Binding Path=MergedContent}" >
+                    <GridViewColumnHeader Content="Elements in Sample" />
+                </GridViewColumn>
+            </GridView.Columns>
+        </GridView>
+
+        <GridView x:Key="GridViewSamplesQIdx">
+            <GridView.Columns>
+                <GridViewColumn Width="0"  DisplayMemberBinding="{Binding Path=ContainerIndex}" >
+                    <GridViewColumnHeader Visibility="Collapsed"  Content="Index" Click="SortHeader_Click" Tag="ContainerIndex" />
+                </GridViewColumn>
+                <GridViewColumn DisplayMemberBinding="{Binding Path=Container}">
+                    <GridViewColumnHeader Content="Container Name" Click="SortHeader_Click" Tag="ContainerName" />
+                </GridViewColumn>
+                <GridViewColumn DisplayMemberBinding="{Binding Path=Lag, StringFormat={}{0:0.00}}">
+                    <GridViewColumnHeader Content="Lag (h)" Click="SortHeader_Click" Tag="Lag" />
+                </GridViewColumn>
+                <GridViewColumn DisplayMemberBinding="{Binding Path=Rate, StringFormat={}{0:0.00}}">
+                    <GridViewColumnHeader Content="Rate (h)" Click="SortHeader_Click" Tag="Rate" />
+                </GridViewColumn>
+                <GridViewColumn  DisplayMemberBinding="{Binding Path=Yield, StringFormat={}{0:0.00}}">
+                    <GridViewColumnHeader Content="Efficiency (&#916;OD)" Click="SortHeader_Click" Tag="Yield" />
+                </GridViewColumn>
+                <GridViewColumn DisplayMemberBinding="{Binding Path=MergedContent}" >
+                    <GridViewColumnHeader Content="Elements in Sample" />
+                </GridViewColumn>
+                <GridViewColumn DisplayMemberBinding="{Binding Path=QualityIndex.R2, StringFormat={}{0:0.00}}">
+                    <GridViewColumnHeader Visibility="{Binding ElementName=ckDisplayQIdx, Path=IsChecked, Converter={StaticResource BoolToVis}}" Width="70" Content="QIdx R2" Click="SortHeader_Click" Tag="QualityIndex.R2" />
+                </GridViewColumn>
+                <GridViewColumn DisplayMemberBinding="{Binding Path=QualityIndex.R2Worst, StringFormat={}{0:0.00}}">
+                    <GridViewColumnHeader Visibility="{Binding ElementName=ckDisplayQIdx, Path=IsChecked, Converter={StaticResource BoolToVis}}" Width="70" Content="QIdx Worst R2" Click="SortHeader_Click" Tag="QualityIndex.R2Worst" />
+                </GridViewColumn>
+                <GridViewColumn  DisplayMemberBinding="{Binding Path=QualityIndex.R2Peaks, StringFormat={}{0:0}}">
+                    <GridViewColumnHeader Visibility="{Binding ElementName=ckDisplayQIdx, Path=IsChecked, Converter={StaticResource BoolToVis}}" Width="80" Content="QIdx Peaks" Click="SortHeader_Click" Tag="QualityIndex.R2Peaks" />
+                </GridViewColumn>
+                <GridViewColumn  DisplayMemberBinding="{Binding Path=QualityIndex.PointDifference, StringFormat={}{0:0.00}}">
+                    <GridViewColumnHeader Visibility="{Binding ElementName=ckDisplayQIdx, Path=IsChecked, Converter={StaticResource BoolToVis}}" Width="90" Content="QIdx PDiff" Click="SortHeader_Click" Tag="QualityIndex.PointDifference" />
+                </GridViewColumn>
+            </GridView.Columns>
+        </GridView>
+
+        <Style TargetType="TextBlock" x:Key="StatusBarTextBlock">
+            <Setter Property="TextWrapping" Value="NoWrap" />
+            <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+            <Setter Property="Padding" Value="2,0" />
+        </Style>
+
+        <Style TargetType="Separator" BasedOn="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}">
+            <Setter Property="Margin" Value="2,0" />
+        </Style>
+
+        <LinearGradientBrush x:Key="HeaderBrush" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#505050" Offset="0"/>
+            <GradientStop Color="#303030" Offset="1"/>
+        </LinearGradientBrush>
+
+        <ContextMenu x:Key="lstViewContextMenu" Name="cntxMnuSort" StaysOpen="true" Background="WhiteSmoke">
+            <ContextMenu.BitmapEffect>
+                <BitmapEffectGroup/>
+            </ContextMenu.BitmapEffect>
+            <MenuItem Header="Merge Selection" Command="CustCommands:MergeCommands.Merge" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}">
+                <MenuItem.Icon>
+                    <Image Source="/Precog;component/Images/NewClassModuleHH.png" Width="16" Height="16" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <Separator></Separator>
+            <MenuItem Header="Copy" Command="Copy" CommandParameter="{Binding Path=PlacementTarget, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}">
+                <MenuItem.Icon>
+                    <Image Source="/Precog;component/Images/CopyHS.png" Width="16" Height="16" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Mark/UnMark as Excluded" Command="Delete" CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}">
+                <MenuItem.Icon>
+                    <Image Source="/Precog;component/Images/delete_X_style.bmp" Width="16" Height="16" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <Separator></Separator>
+            <MenuItem Header="Sort By">
+                <MenuItem.Icon>
+                    <Image Source="/Precog;component/Images/SortHS.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+                <MenuItem Header="Container Name" Tag="ContainerName" utils:MenuItemExtensions.GroupName="SortBy"  IsCheckable="True" IsChecked="True" Command="CustCommands:SortCommands.SortListView" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Tag}" />
+                <MenuItem Header="Lag" Tag="Lag" utils:MenuItemExtensions.GroupName="SortBy" IsCheckable="True" Command="CustCommands:SortCommands.SortListView" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Tag}" />
+                <MenuItem Header="Rate" Tag="Rate" utils:MenuItemExtensions.GroupName="SortBy" IsCheckable="True" Command="CustCommands:SortCommands.SortListView" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Tag}" />
+                <MenuItem Header="Efficiency" Tag="Yield" utils:MenuItemExtensions.GroupName="SortBy"  IsCheckable="True" Command="CustCommands:SortCommands.SortListView" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Tag}" />
+                <Separator></Separator>
+                <MenuItem Header="Ascending" Name="cntxMnuSortAsc" Tag="ASC" utils:MenuItemExtensions.GroupName="SortByOrder" IsCheckable="True" IsChecked="True" Click="cntxMnuOrderSort_Click" />
+                <MenuItem Header="Descending" Name="cntxMnuSortDesc" Tag="DESC" utils:MenuItemExtensions.GroupName="SortByOrder" IsCheckable="True" Click="cntxMnuOrderSort_Click" />
+            </MenuItem>
+        </ContextMenu>
+        
+    </Window.Resources>
+    
+    <Window.CommandBindings>
+        <CommandBinding Command="CustCommands:SortCommands.SortListView" Executed="SortListViewCommand_Executed" />
+        <CommandBinding Command="CustCommands:CopyCommands.CopyData" Executed="Copy_Executed" CanExecute="Copy_CanExecute" />
+        <CommandBinding Command="CustCommands:MergeCommands.Merge" Executed="MergeSelection_Executed" CanExecute="MergeSelection_CanExecute" />
+        <CommandBinding Command="Delete" Executed="MarkAsExcluded_Executed" CanExecute="MarkAsExcluded_CanExecute" />
+        <CommandBinding Command="Copy" Executed="Copy_Executed" CanExecute="Copy_CanExecute" />
+    </Window.CommandBindings>
+    
+    <Grid Margin="4,4,4,0">
+        <DockPanel Name="RootLayout" LastChildFill="True">
+            <StatusBar DockPanel.Dock="Bottom" VerticalAlignment="Bottom">
+                <StatusBar.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                        </Grid>
+                    </ItemsPanelTemplate>
+                </StatusBar.ItemsPanel>
+                <StatusBarItem>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource StatusBarTextBlock}">Macro Selected:</TextBlock>
+                        <TextBlock Style="{StaticResource StatusBarTextBlock}">Default</TextBlock>  
+                    </StackPanel>
+                </StatusBarItem>
+                <StatusBarItem Grid.Column="1">
+                    <StackPanel Orientation="Horizontal">
+                        <Separator />
+                        <TextBlock Style="{StaticResource StatusBarTextBlock}">Rate Extraction method:</TextBlock>
+                        <TextBlock Style="{StaticResource StatusBarTextBlock}" Text="{Binding ElementName=ImportBSControl, Path=RateTraitExtractionMethod}" />
+                    </StackPanel>
+                </StatusBarItem>
+                <StatusBarItem Grid.Column="2">
+                    <StackPanel>
+                        <Separator DockPanel.Dock="Left" />
+                        <TextBlock x:Name="ProgressText" Style="{StaticResource StatusBarTextBlock}"  />
+                    </StackPanel>
+                </StatusBarItem>
+                <StatusBarItem Grid.Column="3">
+                    <StackPanel Orientation="Horizontal">
+                        <Separator DockPanel.Dock="Left" />
+                        <Grid  DockPanel.Dock="Right">
+                            <ProgressBar Name="pBarView" Visibility="Hidden" Height="20" VerticalAlignment="Center" HorizontalAlignment="Right" Width="100" Foreground="Blue" ValueChanged="pBarView_ValueChanged" />
+                            <TextBlock x:Name="ProgressCount" Visibility="Hidden" TextBlock.FontWeight="Bold" Text="{Binding ElementName=pBarView, Path=Value}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Grid> 
+                    </StackPanel>
+                </StatusBarItem>
+            </StatusBar>
+            <DockPanel DockPanel.Dock="Left" LastChildFill="True"  Width="260">
+                <Expander Name="ActionsExpander" Style="{StaticResource ExpanderBlueStyle}" DockPanel.Dock="Top" Header="Actions" Background="{StaticResource TabItem_BackgroundBrush_Unselected}" IsExpanded="{Binding ElementName=ExperimentalRunsExpander, Path=IsExpanded, Converter={StaticResource boolConvert}}" >
+                    <!--<utils:Reveal VerticalAlignment="Top" HorizontalAlignment="Left" IsExpanded="{Binding Path=IsExpanded,ElementName=ActionsExpander}">-->
+                    <ScrollViewer Name="scrlActions" VerticalScrollBarVisibility="Auto" Height="{Binding ElementName=RootLayout, Path=ActualHeight, Converter={StaticResource AScript}, ConverterParameter=Int32.Parse(values[0])-90}">
+                        <DockPanel Name="ActionsPanel"  >
+                            <!--Bioscreen Import-->
+                            <Expander Header="Upload Growth-data Files" Padding="0,2,0,2" DockPanel.Dock="Top" Name="UploadExpander" Expanded="Expander_Expanded">
+                                <controls:ImportBioscreenFile x:Name="ImportBSControl" ImportStep="ImportBSControl_ImportStep" ImportStarted="ImportBSControl_ImportStarted" ImportEnded="ImportBSControl_ImportEnded" ImportMessage="ImportBSControl_ImportMessage" BlankValue="{Binding ElementName=ProcessDataControl, Path=BlankValue}" TrueODCalibarationFunction="{Binding ElementName=ProcessDataControl, Path=TrueODCalibarationFunction}" />
+                            </Expander>
+                            <!--ZoomGraph Controls-->
+                            <Expander Name="GraphControlsExpander" Padding="0,2,0,2"  DockPanel.Dock="Top" Header="Graph Controls" Expanded="Expander_Expanded">
+                                <DockPanel>
+                                    <controls:ZoomGraphControls x:Name="ZoomGraphControlsControl" />
+                                </DockPanel>
+                            </Expander>
+                            <!--Save Experiments-->
+                            <Expander Header="Save Data" IsExpanded="False" Padding="0,2,0,2" DockPanel.Dock="Top" Name="SaveExperimentsExpander" Expanded="Expander_Expanded">
+                                <controls:SaveData x:Name="SaveDataControl" ExperimentalRuns="{Binding ElementName=ExperimentalRunList, Path=ItemsSource}" ReplicateSelection="{Binding ElementName=ReplicateSeleccionControl, Path=ReplicateSelection}" />
+                            </Expander>
+                            <!--Macro-->
+                            <Expander Name="TransformDataExpander" IsExpanded="True" Padding="0,2,0,2" DockPanel.Dock="Top" Header="Parameters" Expanded="Expander_Expanded">
+                                <DockPanel>
+                                    <controls:ProcessData x:Name="ProcessDataControl" ParamaterSet="ProcessDataControl_OnParamaterSet"  ExperimentalRuns="{Binding ElementName=ExperimentalRunList, Path=DataContext}" />
+                                </DockPanel>
+                            </Expander>
+                            <!--ReplicateSelection-->
+                            <!--Utilities-->
+                            <!--<Expander Padding="0,2,0,2"  DockPanel.Dock="Top" Header="Utilities" Expanded="Expander_Expanded">
+                                <DockPanel>
+                                  <controls:Utilities x:Name="UtilitiesControl" SelectedExperimentalRun="{Binding Path=SelectedItem, ElementName=ExperimentalRunList}" CreateHeatMap="UtilitiesControl_CreateHeatMap" />
+                              </DockPanel>
+                           </Expander>-->
+                        </DockPanel>
+                    </ScrollViewer>
+                    <!--</utils:Reveal>-->
+                </Expander>
+                <Expander Name="ExperimentalRunsExpander" IsExpanded="False" Style="{StaticResource ExpanderBlueStyle}" Header="Experimental Runs">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel>
+                            <Label Name="lbEcperimentalRunInfo" Content="Select an experiment to Proceed" HorizontalAlignment="Center" Visibility="{Binding ElementName=ExperimentalRunList, Path=SelectedIndex, Converter={StaticResource SelectedIndexToVisibilityConverter}}" />
+                            <ListBox Name="ExperimentalRunList" MaxWidth="250" BorderThickness="0" VerticalAlignment="Stretch" HorizontalContentAlignment="Stretch" ItemTemplate="{StaticResource RoundPlatesItems }" ItemContainerStyle="{StaticResource ItemHighlightWhenSelected}" SelectionChanged="ExperimentalRunList_SelectionChanged" />
+                            <!--<Button Name="Test" Content="Test" Click="Test_Click" />-->
+                        </StackPanel>
+                    </ScrollViewer>
+                </Expander>
+            </DockPanel>
+            
+            <TabControl Margin="5" Name="ViewTab">
+                <TabItem Header="Experimental Run" Name="Default" MouseUp="TabItem_Click">
+                    <Grid Margin="5" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <ListView Name="lstViewExperiments" ScrollViewer.IsDeferredScrollingEnabled="False" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" View="{StaticResource GridView}"  ItemsSource="{Binding Path=Run}" MouseDoubleClick="lstViewExperiments_MouseDoubleClick">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="ContextMenu" Value="{StaticResource lstViewContextMenu}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=IsFaulty}" Value="True">
+                                            <Setter Property="Background" Value="Tomato" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
+                       
+                      <Grid Grid.Row="1" Margin="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Margin="5" VerticalAlignment="Center">Choose your view:</TextBlock>
+                            <ComboBox Grid.Column="1" Margin="5" Width="150" HorizontalAlignment="Left" Name="lstView" SelectionChanged="lstView_SelectionChanged" />
+                            <CheckBox Name="ckDisplayRaw" Visibility="Collapsed" Grid.Column="1" Content="Display Raw Data" IsChecked="True" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5" Click="ckDisplayRaw_Click" />
+                            <CheckBox Name="ckShowFirstDerivative" Visibility="Collapsed" Grid.Column="1" Content="Display as First Derivative" IsChecked="False" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5" Click="ckShowFirstDerivative_Click" />
+                            <CheckBox Name="ckDisplayQIdx" Visibility="Collapsed" Grid.Column="1" Content="Display Quality Indexes" IsChecked="False" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5" Click="CkDisplayQIdx_OnClick" />  
+                          <!--<Button Name="MergeSelection" Grid.Column="1" HorizontalAlignment="Right" Content="Merge Selection" Click="MergeSelection_Click" />-->
+                            <!--<Button Grid.Column="1" Name="btnFit" Content="Fit" Click="btnFit_Click" HorizontalAlignment="Right" />-->
+                      </Grid>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </DockPanel>
+       
+    </Grid>
+
+
+</Window>
